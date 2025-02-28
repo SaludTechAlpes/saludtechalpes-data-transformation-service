@@ -1,9 +1,10 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from typing import Optional
+from seedwork.dominio.comandos import ComandoDominio
 
 @dataclass
-class EjecutarModelosComando:
+class EjecutarModelosComando(ComandoDominio):
     """
     Comando que activa la ejecución de modelos IA y la generación de DataFrames.
     """

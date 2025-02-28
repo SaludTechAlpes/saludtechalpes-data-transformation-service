@@ -15,7 +15,7 @@ class AdaptadorEjecutarModelosIA(PuertoProcesarComandoModelos):
     REGIONES_ANATOMICAS = ["Tórax", "Cerebro", "Abdomen", "Rodilla", "Columna Vertebral"]
     PATOLOGIAS = ["Normal", "Fractura", "Tumor", "Infección", "Inflamación", "Maligno", "Benigno"]
 
-    def procesar_comando_ejecutar_modelos(self, cluster_id: str, ruta_imagen_anonimizada: str) -> dict:
+    def procesar_comando_ejecutar_modelos(self, cluster_id: str, ruta_imagen_anonimizada: str) -> str:
         """
         Simula la ejecución de modelos IA y la generación de un DataFrame sin generar archivos reales.
         """

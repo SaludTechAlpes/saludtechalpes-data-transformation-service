@@ -89,7 +89,7 @@ def create_app(configuracion=None):
 
             return jsonify({"message": "Evento publicado en `datos-agrupados`"}), 200
         except Exception as e:
-            logger.error(f"Error al publicar evento de prueba: {e}")
+            logger.error(f"❌ Error al publicar evento de prueba: {e}")
             return jsonify({"error": "Error al publicar evento en Pulsar"}), 500
 
 

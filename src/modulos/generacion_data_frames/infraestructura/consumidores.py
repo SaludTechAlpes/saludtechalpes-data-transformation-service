@@ -1,6 +1,7 @@
-from src.modulos.generacion_data_frames.infraestructura.schema.v1.comandos import ComandoEjecutarModelos
+from src.modulos.generacion_data_frames.dominio.comandos import EjecutarModelosComando
 from src.seedwork.infraestructura.consumidor_pulsar import ConsumidorPulsar
 from src.modulos.generacion_data_frames.infraestructura.schema.v1.eventos import EventoDatosAgrupados
+from src.modulos.generacion_data_frames.infraestructura.schema.v1.comandos import ComandoEjecutarModelos
 from src.modulos.generacion_data_frames.infraestructura.despachadores import Despachador
 from src.modulos.generacion_data_frames.dominio.puertos.procesar_comando_modelos import PuertoProcesarComandoModelos
 import pulsar
@@ -24,6 +25,7 @@ class ConsumidorComandoEjecutarModelos(ConsumidorPulsar):
         self.puerto_modelos = puerto_modelos
 
     def procesar_mensaje(self, data):
+        logger.info('👉 Entra a ConsumidorComandoEjecutarModelos > procesar_mensaje')
         self.puerto_modelos.procesar_comando_ejecutar_modelos(
             cluster_id=data.cluster_id,
             ruta_imagen_anonimizada=data.ruta_imagen_anonimizada
@@ -41,9 +43,9 @@ class ConsumidorEventoDatosAgrupados(ConsumidorPulsar):
         super().__init__(cliente, "datos-agrupados", "modelos-ia-sub-eventos", EventoDatosAgrupados)
 
     def procesar_mensaje(self, data):
-        comando_ejecutar = ComandoEjecutarModelos(
+        comando_ejecutar = EjecutarModelosComando(
             cluster_id=data.cluster_id,
             ruta_imagen_anonimizada=data.ruta_imagen_anonimizada
         )
-        self.despachador.publicar_comando(comando_ejecutar, "ejecutar-pipelines-modelos")
-        logger.info(f"Comando publicado al tópico ejecutar-pipelines-modelos: {comando_ejecutar}")
+        logger.info(f'data: {data}')
+        self.despachador.publicar_comando(comando_ejecutar, "ejecutar-modelos")
