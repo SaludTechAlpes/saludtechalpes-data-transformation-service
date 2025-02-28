@@ -9,7 +9,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 config = Config()
 
-class DespachadorGeneracionDataFrames:
+class Despachador:
     """
     Despachador para publicar comandos y eventos en Apache Pulsar.
     """

@@ -10,3 +10,12 @@ class DataFramesGeneradosPayload(Record):
 
 class EventoDataFramesGenerados(EventoIntegracion):
     data = DataFramesGeneradosPayload()
+
+
+class DatosAgrupadosPayload(Record):
+    id = String()
+    cluster_id = String()
+    ruta_imagen_anonimizada = String()
+  
+class EventoDatosAgrupados(EventoIntegracion):
+    data = DatosAgrupadosPayload()

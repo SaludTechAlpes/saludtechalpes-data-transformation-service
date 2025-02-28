@@ -15,7 +15,7 @@ from src.modulos.generacion_data_frames.infraestructura.consumidores import (
     ConsumidorComandoEjecutarModelos,
     ConsumidorEventoDatosAgrupados
 )
-from src.modulos.generacion_data_frames.infraestructura.despachadores import DespachadorGeneracionDataFrames
+from src.modulos.generacion_data_frames.infraestructura.despachador_datos_agrupados import DespachadorDatosAgrupados
 from src.modulos.generacion_data_frames.dominio.eventos import DatosAgrupadosEvento
 
 # Configuración de logs
@@ -63,7 +63,7 @@ def create_app(configuracion=None):
         if not app.config.get('TESTING'):
             comenzar_consumidor()
 
-    despachador_generacion_dataframes = DespachadorGeneracionDataFrames()
+    despachador_generacion_dataframes = DespachadorDatosAgrupados()
 
     @app.route("/health")
     def health():

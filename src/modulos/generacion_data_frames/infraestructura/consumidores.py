@@ -1,7 +1,7 @@
 from src.modulos.generacion_data_frames.infraestructura.schema.v1.comandos import ComandoEjecutarModelos
 from src.seedwork.infraestructura.consumidor_pulsar import ConsumidorPulsar
 from src.modulos.generacion_data_frames.infraestructura.schema.v1.eventos import EventoDatosAgrupados
-from src.modulos.generacion_data_frames.infraestructura.despachadores import DespachadorModelosIA
+from src.modulos.generacion_data_frames.infraestructura.despachadores import Despachador
 from src.modulos.generacion_data_frames.dominio.puertos.procesar_comando_modelos import PuertoProcesarComandoModelos
 import pulsar
 import logging
@@ -34,7 +34,7 @@ class ConsumidorEventoDatosAgrupados(ConsumidorPulsar):
     """
     Consumidor de eventos de datos agrupados en Modelos IA.
     """
-    despachador = DespachadorModelosIA()
+    despachador = Despachador()
 
     def __init__(self):
         cliente = pulsar.Client(f'pulsar://{config.BROKER_HOST}:6650')

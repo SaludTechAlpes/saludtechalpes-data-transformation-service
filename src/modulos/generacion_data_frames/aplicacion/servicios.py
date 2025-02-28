@@ -2,9 +2,8 @@ from src.modulos.generacion_data_frames.dominio.puertos.procesar_comando_modelos
 from src.modulos.generacion_data_frames.infraestructura.adaptadores.ejecutar_modelos import AdaptadorEjecutarModelosIA
 from src.modulos.generacion_data_frames.dominio.entidades import DataFrame
 from src.modulos.generacion_data_frames.dominio.puertos.repositorios import RepositorioDataFrame
-from src.modulos.generacion_data_frames.infraestructura.despachadores import DespachadorGeneracionDataFrames
+from src.modulos.generacion_data_frames.infraestructura.despachadores import Despachador
 from src.modulos.generacion_data_frames.dominio.eventos import DataFramesGeneradosEvento
-import uuid
 from datetime import datetime, timezone
 import logging
 
@@ -19,7 +18,7 @@ class ServicioAplicacionGeneracionDataFrames(PuertoProcesarComandoModelos):
     def __init__(self, adaptador_modelos: AdaptadorEjecutarModelosIA, repositorio_dataframes: RepositorioDataFrame):
         self.adaptador_modelos = adaptador_modelos
         self.repositorio_dataframes = repositorio_dataframes
-        self.despachador = DespachadorGeneracionDataFrames()
+        self.despachador = Despachador()
 
     def procesar_comando_ejecutar_modelos(self, cluster_id: str, ruta_imagen_anonimizada: str):
         """
