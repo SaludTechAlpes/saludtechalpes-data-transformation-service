@@ -11,4 +11,4 @@ class DataFrame(Entidad):
     id: uuid.UUID = field(default_factory=uuid.uuid4)
     ruta_archivo_parquet: str = ""
     fecha_generacion: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
-    modeloId: uuid.UUID = field(default_factory=uuid.uuid4)
+    cluster_id: uuid.UUID = field(default_factory=uuid.uuid4)
