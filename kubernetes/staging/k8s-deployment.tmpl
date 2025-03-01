@@ -1,25 +1,25 @@
 ###################################
-# saludtechalpes-data-processor-service
+# saludtechalpes-data-transformation-service
 ###################################
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: saludtechalpes-data-processor-service
+  name: saludtechalpes-data-transformation-service
   labels:
-    app: saludtechalpes-data-processor-service
+    app: saludtechalpes-data-transformation-service
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: saludtechalpes-data-processor-service
+      app: saludtechalpes-data-transformation-service
   template:
     metadata:
       labels:
-        app: saludtechalpes-data-processor-service
+        app: saludtechalpes-data-transformation-service
     spec:
       containers:
-        - name: saludtechalpes-data-processor-service
-          image: us-east1-docker.pkg.dev/saludtechalpes/saludtechalpes/saludtechalpes-data-processor-service:{{IMAGE_TAG}}
+        - name: saludtechalpes-data-transformation-service
+          image: us-east1-docker.pkg.dev/saludtechalpes/saludtechalpes/saludtechalpes-data-transformation-service:{{IMAGE_TAG}}
           env:
             - name: "FLASK_ENV"
               valueFrom:
@@ -51,11 +51,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: saludtechalpes-data-processor-service-network
+  name: saludtechalpes-data-transformation-service-network
 spec:
   type: LoadBalancer
   selector:
-    app: saludtechalpes-data-processor-service
+    app: saludtechalpes-data-transformation-service
   ports:
     - protocol: TCP
       port: 5000

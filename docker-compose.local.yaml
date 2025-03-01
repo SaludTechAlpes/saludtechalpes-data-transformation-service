@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: local.Dockerfile
-    container_name: saludtechalpes-data-processor-local-service
+    container_name: saludtechalpes-data-transformation-local-service
     restart: always
     volumes:
       - ".:/app"

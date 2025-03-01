@@ -59,8 +59,8 @@ jobs:
         env:
           PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
         run: |
-          docker build -t us-east1-docker.pkg.dev/$PROJECT_ID/$PROJECT_ID/saludtechalpes-data-processor-service:build-$GITHUB_RUN_NUMBER .
-          docker push us-east1-docker.pkg.dev/$PROJECT_ID/$PROJECT_ID/saludtechalpes-data-processor-service:build-$GITHUB_RUN_NUMBER
+          docker build -t us-east1-docker.pkg.dev/$PROJECT_ID/$PROJECT_ID/saludtechalpes-data-transformation-service:build-$GITHUB_RUN_NUMBER .
+          docker push us-east1-docker.pkg.dev/$PROJECT_ID/$PROJECT_ID/saludtechalpes-data-transformation-service:build-$GITHUB_RUN_NUMBER
       
       - name: Get GKE credentials and kubectl apply and deploy 🚀
         env:

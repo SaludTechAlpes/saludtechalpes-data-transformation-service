@@ -1,9 +1,9 @@
 # Description
 This is a microservice to handle images 🏞️ processing and anonimization them.
 
-![Github](https://github.com/SaludTechAlpes/saludtechalpes-data-processor-service/actions/workflows/action.yaml/badge.svg)
-![Github](https://github.com/SaludTechAlpes/saludtechalpes-data-processor-service/actions/workflows/merge-to-develop.yaml/badge.svg)
-![Github](https://github.com/SaludTechAlpes/saludtechalpes-data-processor-service/actions/workflows/release-to-main.yaml/badge.svg)
+![Github](https://github.com/SaludTechAlpes/saludtechalpes-data-transformation-service/actions/workflows/action.yaml/badge.svg)
+![Github](https://github.com/SaludTechAlpes/saludtechalpes-data-transformation-service/actions/workflows/merge-to-develop.yaml/badge.svg)
+![Github](https://github.com/SaludTechAlpes/saludtechalpes-data-transformation-service/actions/workflows/release-to-main.yaml/badge.svg)
 
 # Made with
 [![Python](https://img.shields.io/badge/python-2b5b84?style=for-the-badge&logo=python&logoColor=white&labelColor=000000)]()
@@ -32,7 +32,7 @@ $ flask --app ./src run
 1. Step one locate in the root of the project
 
 ```bash
-$ cd saludtechalpes-data-processor-service
+$ cd saludtechalpes-data-transformation-service
 ```
 
 2. Run in docker 🐳
@@ -69,7 +69,7 @@ curl --location 'http://localhost:3001/health' --header 'Content-Type: applicati
 
 ```json
 {
-    "application_name": "saludtechalpes-data-processor-service",
+    "application_name": "saludtechalpes-data-transformation-service",
     "environment": "local",
     "status": "up"
 }
