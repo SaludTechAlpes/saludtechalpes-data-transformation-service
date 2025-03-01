@@ -1,7 +1,7 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from typing import Optional
-from seedwork.dominio.comandos import ComandoDominio
+from src.seedwork.dominio.comandos import ComandoDominio
 
 @dataclass
 class EjecutarModelosComando(ComandoDominio):
