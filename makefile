@@ -58,5 +58,5 @@ kubernetes-local-up:
 kubernetes-local-down:
 	kubectl delete configMap/data-processor-configmap
 	kubectl delete secrets/data-processor-secrets
-	kubectl delete deploy/saludtechalpes-data-processor-service
-	kubectl delete ingress/saludtechalpes-data-processor-service-ingress
+	kubectl delete deploy/saludtechalpes-data-transformation-service
+	kubectl delete ingress/saludtechalpes-data-transformation-service-ingress
