@@ -104,9 +104,7 @@ services:
   data-transformation-service:
     container_name: data-transformation-service
     hostname: data-transformation-service
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ghcr.io/saludtechalpes/saludtechalpes-data-transformation-service:latest
     networks:
       - db_net
       - pulsar
@@ -118,7 +116,7 @@ services:
     env_file:
       - .env
     ports:
-      - "5000:5000"
+      - "5001:5000"
 
   # Base de Datos PostgreSQL
   db:

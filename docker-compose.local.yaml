@@ -116,7 +116,7 @@ services:
     env_file:
       - .env.local
     ports:
-      - "5000:5000"
+      - "5001:5000"
 
   # Base de Datos PostgreSQL
   db:
