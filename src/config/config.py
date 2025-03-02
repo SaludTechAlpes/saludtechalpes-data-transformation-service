@@ -13,11 +13,15 @@ class Config:
             load_dotenv(dotenv_path='.env', override=True)
 
         self.ENVIRONMENT = environment
-        self.APP_NAME = os.getenv('APP_NAME', 'saludtech-data-processor')
+        self.APP_NAME = os.getenv('APP_NAME', 'saludtech-data-transformation')
         self.PULSAR_HOST = os.getenv('PULSAR_HOST', 'pulsar')
         self.BROKER_HOST = os.getenv('BROKER_HOST', 'broker')
+        self.EXTERNAL_BROKER_HOST = os.getenv('EXTERNAL_BROKER_HOST', 'broker')
+        self.BROKER_PORT = os.getenv('BROKER_HOST', 6650)
+        self.EXTERNAL_BROKER_PORT = os.getenv('EXTERNAL_BROKER_PORT', 6650)
         self.DB_HOST = os.getenv('DB_HOST', 'db')
         self.DB_PORT = os.getenv('DB_PORT', '5432')
         self.DB_USER = os.getenv('DB_USER', 'admin')
         self.DB_PASSWORD = os.getenv('DB_PASSWORD', 'admin')
         self.DB_NAME = os.getenv('DB_NAME', 'saludtechalpes')
+
