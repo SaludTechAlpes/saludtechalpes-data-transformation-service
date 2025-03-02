@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 config = Config()
 pulsar_cliente = None
 if os.getenv("FLASK_ENV") != "test":
-    pulsar_cliente = pulsar.Client(f'pulsar://{config.BROKER_HOST}:6650')
+    pulsar_cliente = pulsar.Client(f'pulsar://{config.BROKER_HOST}:{config.BROKER_PORT}')
 
 def comenzar_consumidor():
     """

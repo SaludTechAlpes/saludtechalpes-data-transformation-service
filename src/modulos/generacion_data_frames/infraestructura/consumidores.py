@@ -20,12 +20,11 @@ class ConsumidorComandoEjecutarModelos(ConsumidorPulsar):
     Consumidor de comandos de ejecución de modelos en Modelos IA.
     """
     def __init__(self, puerto_modelos: PuertoProcesarComandoModelos):
-        cliente = pulsar.Client(f'pulsar://{config.BROKER_HOST}:6650')
+        cliente = pulsar.Client(f'pulsar://{config.BROKER_HOST}:{config.BROKER_PORT}')
         super().__init__(cliente, "ejecutar-modelos", "modelos-ia-sub-comandos", ComandoEjecutarModelos)
         self.puerto_modelos = puerto_modelos
 
     def procesar_mensaje(self, data):
-        logger.info('👉 Entra a ConsumidorComandoEjecutarModelos > procesar_mensaje')
         self.puerto_modelos.procesar_comando_ejecutar_modelos(
             cluster_id=data.cluster_id,
             ruta_imagen_anonimizada=data.ruta_imagen_anonimizada
@@ -39,7 +38,7 @@ class ConsumidorEventoDatosAgrupados(ConsumidorPulsar):
     despachador = Despachador()
 
     def __init__(self):
-        cliente = pulsar.Client(f'pulsar://{config.BROKER_HOST}:6650')
+        cliente = pulsar.Client(f'pulsar://{config.EXTERNAL_BROKER_HOST}:{config.EXTERNAL_BROKER_PORT}')
         super().__init__(cliente, "datos-agrupados", "modelos-ia-sub-eventos", EventoDatosAgrupados)
 
     def procesar_mensaje(self, data):
