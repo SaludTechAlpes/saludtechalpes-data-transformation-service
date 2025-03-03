@@ -18,11 +18,11 @@ spec:
           service:
             name: saludtechalpes-data-transformation-service
             port: 
-              number: 5000
+              number: 5002
       - pathType: Prefix
         path: /
         backend:
           service:
             name: saludtechalpes-data-transformation-service
             port: 
-              number: 5000
+              number: 5002
