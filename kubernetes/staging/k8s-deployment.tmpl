@@ -24,18 +24,73 @@ spec:
             - name: "FLASK_ENV"
               valueFrom:
                 configMapKeyRef:
-                  name: data-processor-configmap
+                  name: data-transformation-configmap
                   key: FLASK_ENV
             - name: "APP_NAME"
               valueFrom:
                 configMapKeyRef:
-                  name: data-processor-configmap
+                  name: data-transformation-configmap
                   key: APP_NAME
+            - name: "PULSAR_HOST"
+              valueFrom:
+                configMapKeyRef:
+                  name: data-transformation-configmap
+                  key: PULSAR_HOST
+            - name: "BROKER_HOST"
+              valueFrom:
+                configMapKeyRef:
+                  name: data-transformation-configmap
+                  key: BROKER_HOST
+            - name: "EXTERNAL_BROKER_HOST"
+              valueFrom:
+                configMapKeyRef:
+                  name: data-transformation-configmap
+                  key: EXTERNAL_BROKER_HOST
+            - name: "BROKER_PORT"
+              valueFrom:
+                configMapKeyRef:
+                  name: data-transformation-configmap
+                  key: BROKER_PORT
+            - name: "EXTERNAL_BROKER_PORT"
+              valueFrom:
+                configMapKeyRef:
+                  name: data-transformation-configmap
+                  key: EXTERNAL_BROKER_PORT
             - name: "PHRASE_KEY"
               valueFrom:
                 secretKeyRef:
-                  name: data-processor-secrets
+                  name: data-transformation-secrets
                   key: PHRASE_KEY
+            - name: "DB_USER"
+              valueFrom:
+                secretKeyRef:
+                  name: data-transformation-secrets
+                  key: DB_USER
+            - name: "DB_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: data-transformation-secrets
+                  key: DB_PASSWORD
+            - name: "DB_NAME"
+              valueFrom:
+                secretKeyRef:
+                  name: data-transformation-secrets
+                  key: DB_NAME
+            - name: "DB_NAME"
+              valueFrom:
+                secretKeyRef:
+                  name: data-transformation-secrets
+                  key: DB_NAME
+            - name: "DB_PORT"
+              valueFrom:
+                secretKeyRef:
+                  name: data-transformation-secrets
+                  key: DB_PORT
+            - name: "DB_HOST"
+              valueFrom:
+                secretKeyRef:
+                  name: data-transformation-secrets
+                  key: DB_HOST
           ports:
             - containerPort: 5000
           resources:
@@ -58,5 +113,5 @@ spec:
     app: saludtechalpes-data-transformation-service
   ports:
     - protocol: TCP
-      port: 5000
+      port: 5002
       targetPort: 5000

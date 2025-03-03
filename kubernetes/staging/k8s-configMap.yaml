@@ -1,7 +1,12 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: data-processor-configmap
+  name: data-transformation-configmap
 data:
   FLASK_ENV: "staging"
   APP_NAME: "saludtechalpes-data-transformation-service"
+  PULSAR_HOST: "pulsar"
+  BROKER_HOST: "broker"
+  EXTERNAL_BROKER_HOST: "broker"
+  BROKER_PORT: "6650"
+  EXTERNAL_BROKER_PORT: "6650"
