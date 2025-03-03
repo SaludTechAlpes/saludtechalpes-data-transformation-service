@@ -37,10 +37,3 @@ class DespachadorDatosAgrupados:
         )
         evento_pulsar = EventoDatosAgrupados(data=payload)
         self._publicar_mensaje(evento_pulsar, topico, EventoDatosAgrupados)
-
-    def cerrar(self):
-        """
-        Cierra la conexión con Pulsar.
-        """
-        self.cliente.close()
-        logger.info("🔌 Cliente Pulsar cerrado.")
