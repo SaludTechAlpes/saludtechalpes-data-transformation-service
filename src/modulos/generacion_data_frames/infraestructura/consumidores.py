@@ -21,7 +21,7 @@ class ConsumidorComandoEjecutarModelos(ConsumidorPulsar):
     """
     def __init__(self, puerto_modelos: PuertoProcesarComandoModelos):
         cliente = pulsar.Client(f'pulsar://{config.BROKER_HOST}:{config.BROKER_PORT}')
-        super().__init__(cliente, "ejecutar-modelos", "modelos-ia-sub-comandos", ComandoEjecutarModelos)
+        super().__init__(cliente, "ejecutar-modelos", "saludtech-sub-comandos", ComandoEjecutarModelos)
         self.puerto_modelos = puerto_modelos
 
     def procesar_mensaje(self, data):
@@ -39,7 +39,7 @@ class ConsumidorEventoDatosAgrupados(ConsumidorPulsar):
 
     def __init__(self):
         cliente = pulsar.Client(f'pulsar://{config.EXTERNAL_BROKER_HOST}:{config.EXTERNAL_BROKER_PORT}')
-        super().__init__(cliente, "datos-agrupados", "modelos-ia-sub-eventos", EventoDatosAgrupados)
+        super().__init__(cliente, "datos-agrupados", "saludtech-sub-eventos", EventoDatosAgrupados)
 
     def procesar_mensaje(self, data):
         comando_ejecutar = EjecutarModelosComando(
