@@ -19,7 +19,6 @@ RUN apk add --no-cache \
     gcompat
 
 
-COPY . /app
 COPY requirements.txt ./
 RUN pip install --upgrade "pip<24.1"
 RUN pip install -r requirements.txt

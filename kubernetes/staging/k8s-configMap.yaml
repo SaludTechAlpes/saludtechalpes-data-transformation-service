@@ -4,4 +4,4 @@ metadata:
   name: data-processor-configmap
 data:
   FLASK_ENV: "staging"
-  APP_NAME: "saludtechalpes-data-processor-service"
+  APP_NAME: "saludtechalpes-data-transformation-service"

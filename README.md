@@ -1,90 +1,159 @@
-# Description
-This is a microservice to handle images 🏞️ processing and anonimization them.
+# SaludTech Alpes - Data Processor Service
 
-![Github](https://github.com/SaludTechAlpes/saludtechalpes-data-processor-service/actions/workflows/action.yaml/badge.svg)
-![Github](https://github.com/SaludTechAlpes/saludtechalpes-data-processor-service/actions/workflows/merge-to-develop.yaml/badge.svg)
-![Github](https://github.com/SaludTechAlpes/saludtechalpes-data-processor-service/actions/workflows/release-to-main.yaml/badge.svg)
+Este repositorio contiene el servicio de trasnformación de datos para el proyecto **SaludTech Alpes**. Este servicio implementa una arquitectura basada en **eventos y comandos**, utilizando **CQRS** y separación de responsabilidades para garantizar modularidad y escalabilidad.
 
-# Made with
-[![Python](https://img.shields.io/badge/python-2b5b84?style=for-the-badge&logo=python&logoColor=white&labelColor=000000)]()
-[![Flask](https://img.shields.io/badge/flask-000000?style=for-the-badge&logo=flask&logoColor=white&labelColor=000000)]()
+![Github](https://github.com/SaludTechAlpes/saludtechalpes-data-transformation-service/actions/workflows/action.yaml/badge.svg)
+![Github](https://github.com/SaludTechAlpes/saludtechalpes-data-transformation-service/actions/workflows/merge-to-develop.yaml/badge.svg)
+![Github](https://github.com/SaludTechAlpes/saludtechalpes-data-transformation-service/actions/workflows/release-to-main.yaml/badge.svg)
 
-# How to execute
 
-If you want execute without docker then you can use the next commands in your terminal.
-Note: firstable is important that you have your python virtual environmente created.
+## 📂 Estructura del Proyecto
 
-into directory flaskr execute
+El proyecto sigue una estructura modular organizada por capas de **Dominio, Aplicación e Infraestructura**, siguiendo los principios de **Domain-Driven Design (DDD)**. A continuación, se describe cada parte:
+
+### **1.** **`src/config`**
+
+Contiene la configuración del proyecto:
+
+- `config.py`: Configuraciones generales de la aplicación.
+- `db.py`: Configuración de la base de datos y conexión.
+
+### **2.** **`src/modulos`**
+
+Aquí se encuentran los módulos principales del sistema.
+
+#### **2.1 `anonimizacion`**
+
+Este módulo se encarga de anonimizar las imágenes médicas y sus metadatos asociados.
+
+- **`aplicacion`**: Contiene la lógica de aplicación y los servicios encargados de coordinar procesos de negocio.
+- **`dominio`**: Define las entidades, reglas de negocio, eventos de dominio y puertos.
+- **`infraestructura`**: Implementaciones concretas de los puertos, repositorios, adaptadores y consumidores de eventos.
+- **`eventos.py`**: Define los eventos de dominio relacionados con la anonimización de datos.
+- **`comandos.py`**: Define los comandos ejecutados dentro del proceso de anonimización.
+
+#### **2.2 `mapeo`**
+
+Este módulo se encarga de agrupar las imágenes anonimizadas en clústers dependiendo de sus metadatos.
+
+- **`aplicacion`**: Contiene la lógica de aplicación y los servicios encargados de coordinar procesos de negocio.
+- **`dominio`**: Define las entidades, reglas de negocio, eventos de dominio y puertos.
+- **`infraestructura`**: Implementaciones concretas de los puertos, repositorios, adaptadores y consumidores de eventos.
+- **`eventos.py`**: Define los eventos de dominio relacionados con la anonimización de datos.
+- **`comandos.py`**: Define los comandos ejecutados dentro del proceso de anonimización.
+
+#### **2.3 `ingesta` (Módulo Auxiliar)**
+
+Este módulo maneja la ingesta de datos antes de ser anonimizados. Según la arquitectura diseñada debería estar en un **microservicio separado**, pero para poder evidenciar el correcto funcionamiento de los otros módulos, se ha puesto temporalmente aqui. Sus principales componentes son:
+
+- **`dominio`**: Define los eventos de ingesta.
+- **`infraestructura`**: Implementaciones concretas de los puertos expuestos por la capa de dominio.
+
+### **3. `src/seedwork`**
+
+Este módulo contiene código reutilizable para todas las aplicaciones dentro del sistema.
+
+- **`aplicacion`**: Define servicios genéricos, comandos y handlers.
+- **`dominio`**: Contiene las abstracciones de entidades, eventos, objetos de valor, reglas de negocio y repositorios.
+- **`infraestructura`**: Define implementaciones genéricas de consumidores de eventos, repositorios y en general puertos.
+
+## 🔄 **Flujo de Trabajo del Sistema**
+
+El sistema sigue un flujo basado en **eventos y comandos**:
+
+1. **Ingesta de datos**: El módulo de ingesta emite el evento **`DatosIngestadosEvento`**.
+2. **Anonimización de datos**: El módulo de anonimización consume este evento y envía el comando **`AnonimizarDatosComando`**.
+3. **Procesamiento de anonimización**: Se ejecuta el proceso de anonimización y, si es exitoso, se emite el evento **`DatosAnonimizadosEvento`**.
+4. **Mapeo de datos**: El módulo de mapeo escucha **`DatosAnonimizadosEvento`** y ejecuta el comando **`MapearDatosComando`**, que agrupa las imágenes en clústeres según sus metadatos.
+5. **Procesamiento de mapeo**: Se ejecuta el proceso de mapeo y, si es exitoso, se emite el evento **`DatosAgrupados`**
+
+## 🚀 **Cómo Ejecutar la Aplicación**
+
+### **1. Configuración previa (si no se usa Gitpod)**
+
+Si no estás utilizando Gitpod, es necesario ejecutar los siguientes comandos antes de iniciar la aplicación para el correcto funcionamiento de Pulsar:
+
 ```bash
-$ flask --app ./src run
+mkdir -p data/bookkeeper && mkdir -p data/zookeeper && sudo chmod -R 777 ./data
 ```
 
-# Prerequirements
-
-
-* Python 🐍
-* Docker & docker-compose 🐳 (Optional).
-* For Linux 🐧 and mac 🍎 you can use makefile.
-* For Windows 🪟 you can use bash function.
-
-# How to execute with docker 🐳
-
-1. Step one locate in the root of the project
+### **2. Desplegar con Docker Compose**
 
 ```bash
-$ cd saludtechalpes-data-processor-service
+make docker-local-up
 ```
-
-2. Run in docker 🐳
+O si no tiene instalado make
 
 ```bash
-# With Linux 🐧 or Mac 🍎
-$ make docker-local-up
-
-# With Windows 🪟
-$ source run.sh; docker_local_up
-
-# With docker compose for all Operative Systems
-
-$ docker compose -f=docker-compose.local.yaml up --build
+docker compose -f=docker-compose.local.yaml up --build
 ```
 
-3. Make sure that all microservices are running
+### **3. En caso de errores con Bookkeeper o Zookeeper**
 
-* Executing this command
+Si los contenedores de **Bookkeeper** o **Zookeeper** fallan o se reinician constantemente, sigue estos pasos:
 
 ```bash
-$ docker ps
+make docker-local-down
+rm -rf data
+mkdir -p data/bookkeeper && mkdir -p data/zookeeper && sudo chmod -R 777 ./data
+make docker-up
 ```
-<img width="1386" alt="saludtech-alpes-data-processor-service-running" src="https://github.com/user-attachments/assets/30eed111-9eab-47cb-937a-981cd19c1322" />
 
-
-4. Execute the **health** api rest with cUrl or you could use postman 👩🏻‍🚀 in order to validate the health 💚
+O si no tiene instalado make
 
 ```bash
-curl --location 'http://localhost:3001/health' --header 'Content-Type: application/json'
+docker compose -f=docker-compose.local.yaml down
+rm -rf data
+mkdir -p data/bookkeeper && mkdir -p data/zookeeper && sudo chmod -R 777 ./data
+make docker-up
 ```
 
-### Body response
+## 🛠 **Endpoints de la API**
+
+### **1. Verificar estado del servicio**
+
+**Endpoint:** `GET /health`
+
+**Descripción:** Retorna el estado de la aplicación.
+
+**Ejemplo de solicitud con curl:**
+
+```bash
+curl -X GET http://localhost:5000/health
+```
+
+**Respuesta:**
 
 ```json
 {
-    "application_name": "saludtechalpes-data-processor-service",
-    "environment": "local",
-    "status": "up"
+  "status": "up",
+  "application_name": "SaludTech Alpes",
+  "environment": "development"
 }
-
 ```
 
-5. Finally, shutdown the environment in docker 🐳
+### **2. Simular ingesta de datos**
+
+**Endpoint:** `GET /simular-datos-agrupados`
+
+**Descripción:** Envía un evento de procesamiento de datos ficticio a Pulsar, lo que comienza todo el proceso de anonimización y mapeo.
+
+**Ejemplo de solicitud con curl:**
+
 ```bash
-# With Linux 🐧 or Mac 🍎
-$ make docker-local-down
-
-# With Windows 🪟
-$ source run.sh; docker_local_down
-
-# With docker compose for all Operative Systems
-
-$ docker compose -f=docker-compose.local.yaml down
+curl -X GET http://localhost:5000//simular-datos-agrupados
 ```
+
+**Respuesta:**
+
+```json
+{
+  "message": "Evento enviado a Pulsar"
+}
+```
+
+## 📌 **Notas Finales**
+
+Este servicio es solo una parte del sistema **SaludTech Alpes** y debe comunicarse con otros servicios para funcionar correctamente. En un futuro se debe separar completamente el módulo de **ingesta** en un microservicio independiente.
+
+---

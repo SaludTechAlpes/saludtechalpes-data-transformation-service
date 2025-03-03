@@ -101,12 +101,10 @@ services:
       bash -c "bin/apply-config-from-env.py conf/broker.conf && exec bin/pulsar broker"
 
   # Servicio de Procesamiento de Datos
-  data-processor-service:
-    container_name: data-processor-service
-    hostname: data-processor-service
-    build:
-      context: .
-      dockerfile: Dockerfile
+  data-transformation-service:
+    container_name: data-transformation-service
+    hostname: data-transformation-service
+    image: ghcr.io/saludtechalpes/saludtechalpes-data-transformation-service:latest
     networks:
       - db_net
       - pulsar
@@ -116,9 +114,9 @@ services:
       db:
         condition: service_started
     env_file:
-      - .env.local
+      - .env
     ports:
-      - "5000:5000"
+      - "5001:5000"
 
   # Base de Datos PostgreSQL
   db:

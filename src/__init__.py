@@ -1,52 +1,55 @@
 import os
 import pulsar
-import json
 import logging
 import threading
 
 from flask import Flask, jsonify
 from src.config.config import Config
-from src.modulos.ingesta.infraestructura.despachadores import Despachador
-from src.modulos.ingesta.dominio.eventos import DatosImportadosEvento
-from src.modulos.anonimizacion.infraestructura.consumidores_comandos import ConsumidorComandosAnonimizacion
-from src.modulos.anonimizacion.infraestructura.consumidores_eventos import ConsumidorEventosIngesta
-from src.modulos.anonimizacion.aplicacion.servicios import ServicioAplicacionAnonimizacion
-from src.modulos.anonimizacion.infraestructura.adaptadores.anonimizar_datos import AdaptadorAnonimizarDatos
-from src.modulos.anonimizacion.infraestructura.adaptadores.repositorios import RepositorioImagenAnonimizadaPostgres
 from src.config.db import Base, engine
+
+# Importación de módulos de Generación de DataFrames
+from src.modulos.generacion_data_frames.aplicacion.servicios import ServicioAplicacionGeneracionDataFrames
+from src.modulos.generacion_data_frames.infraestructura.adaptadores.ejecutar_modelos import AdaptadorEjecutarModelosIA
+from src.modulos.generacion_data_frames.infraestructura.adaptadores.repositorios import RepositorioDataFramePostgres
+from src.modulos.generacion_data_frames.infraestructura.consumidores import (
+    ConsumidorComandoEjecutarModelos,
+    ConsumidorEventoDatosAgrupados
+)
+from src.modulos.generacion_data_frames.infraestructura.despachador_datos_agrupados import DespachadorDatosAgrupados
+from src.modulos.generacion_data_frames.dominio.eventos import DatosAgrupadosEvento
 
 # Configuración de logs
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Identifica el directorio base
-basedir = os.path.abspath(os.path.dirname(__file__))
+# Configuración de Pulsar
 config = Config()
-
 pulsar_cliente = None
 if os.getenv("FLASK_ENV") != "test":
-    pulsar_cliente = pulsar.Client(f'{os.getenv("PULSAR_HOST")}://{os.getenv("BROKER_HOST")}:6650')
+    pulsar_cliente = pulsar.Client(f'pulsar://{config.BROKER_HOST}:{config.BROKER_PORT}')
 
 def comenzar_consumidor():
     """
-    Inicia el consumidor en un hilo separado, pasando el servicio de aplicación.
+    Inicia los consumidores en hilos separados.
     """
 
     if os.getenv("FLASK_ENV") == "test":
         logger.info("🔹 Saltando inicio de consumidores en modo test")
         return
-    # Crear las dependencias del servicio de aplicación
-    adaptador_anonimizacion = AdaptadorAnonimizarDatos()
-    repositorio_imagenes = RepositorioImagenAnonimizadaPostgres()
-    
-    # Instanciar el servicio de aplicación con sus dependencias
-    servicio_anonimizacion = ServicioAplicacionAnonimizacion(adaptador_anonimizacion, repositorio_imagenes)
 
-    consumidor_eventos = ConsumidorEventosIngesta()
-    threading.Thread(target=consumidor_eventos.suscribirse, daemon=True).start()
+    # Crear dependencias del servicio de aplicación
+    adaptador_modelos = AdaptadorEjecutarModelosIA()
+    repositorio_dataframes = RepositorioDataFramePostgres()
+
+    # Instanciar el servicio de aplicación
+    servicio_generacion_dataframes = ServicioAplicacionGeneracionDataFrames(adaptador_modelos, repositorio_dataframes)
+
+    # Iniciar consumidores en hilos separados
+    consumidor_eventos_datos_agrupados = ConsumidorEventoDatosAgrupados()
+    threading.Thread(target=consumidor_eventos_datos_agrupados.suscribirse, daemon=True).start()
     
-    consumidor_comandos = ConsumidorComandosAnonimizacion(servicio_anonimizacion)
-    threading.Thread(target=consumidor_comandos.suscribirse, daemon=True).start()
+    consumidor_comandos_ejecutar_modelos = ConsumidorComandoEjecutarModelos(servicio_generacion_dataframes)
+    threading.Thread(target=consumidor_comandos_ejecutar_modelos.suscribirse, daemon=True).start()
 
 def create_app(configuracion=None):
     global pulsar_cliente
@@ -56,13 +59,11 @@ def create_app(configuracion=None):
     with app.app_context():
         if app.config.get('TESTING'):
             app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///:memory:"
-        Base.metadata.create_all(engine) 
+        Base.metadata.create_all(engine)
         if not app.config.get('TESTING'):
             comenzar_consumidor()
 
-    despachador_ingesta = Despachador()
-
-    
+    despachador_generacion_dataframes = DespachadorDatosAgrupados()
 
     @app.route("/health")
     def health():
@@ -71,6 +72,25 @@ def create_app(configuracion=None):
             "application_name": config.APP_NAME,
             "environment": config.ENVIRONMENT
         }
+
+    @app.route("/simular-datos-agrupados", methods=["GET"])
+    def simular_datos_agrupados():
+        """
+        Endpoint para probar la publicación del evento `Datos Agrupados` en Pulsar.
+        """
+        try:
+            evento_prueba = DatosAgrupadosEvento(
+                cluster_id="rayosx_torax_neumonia",
+                ruta_imagen_anonimizada="/simulacion/imagenes/imagen_1234.dcm"
+            )
+
+            if not app.config.get('TESTING'):
+                despachador_generacion_dataframes.publicar_evento(evento_prueba, "datos-agrupados")
+
+            return jsonify({"message": "Evento publicado en `datos-agrupados`"}), 200
+        except Exception as e:
+            logger.error(f"❌ Error al publicar evento de prueba: {e}")
+            return jsonify({"error": "Error al publicar evento en Pulsar"}), 500
 
 
     # Cerrar Pulsar cuando la aplicación termina
