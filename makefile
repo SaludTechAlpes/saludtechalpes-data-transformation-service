@@ -56,7 +56,7 @@ kubernetes-local-up:
 	minikube tunnel
 
 kubernetes-local-down:
-	kubectl delete configMap/data-processor-configmap
-	kubectl delete secrets/data-processor-secrets
+	kubectl delete configMap/data-transformation-configmap
+	kubectl delete secrets/data-transformation-secrets
 	kubectl delete deploy/saludtechalpes-data-transformation-service
 	kubectl delete ingress/saludtechalpes-data-transformation-service-ingress
