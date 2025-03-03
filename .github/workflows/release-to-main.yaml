@@ -92,6 +92,7 @@ jobs:
           -e "s|{{DB_NAME}}|${DB_NAME}|g" \
           -e "s|{{DB_PORT}}|${DB_PORT}|g" \
           -e "s|{{DB_HOST}}|${DB_HOST}|g" \
+          ./kubernetes/staging/k8s-secrets.tmpl > kubernetes/staging/k8s-secrets.yaml
           kubectl apply -f kubernetes/staging/k8s-configMap.yaml
           kubectl apply -f kubernetes/staging/k8s-secrets.yaml
           kubectl apply -f kubernetes/staging/k8s-deployment.yaml
