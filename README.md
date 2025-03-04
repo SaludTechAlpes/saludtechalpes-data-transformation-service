@@ -1,6 +1,6 @@
 # SaludTech Alpes - Data Processor Service
 
-Este repositorio contiene el servicio de trasnformación de datos para el proyecto **SaludTech Alpes**. Este servicio implementa una arquitectura basada en **eventos y comandos**, utilizando **CQRS** y separación de responsabilidades para garantizar modularidad y escalabilidad.
+Este repositorio contiene el servicio de transformación de datos para el proyecto **SaludTech Alpes**. Este servicio implementa una arquitectura basada en **eventos y comandos**, utilizando **CQRS** y separación de responsabilidades para garantizar modularidad y escalabilidad.
 
 ![Github](https://github.com/SaludTechAlpes/saludtechalpes-data-transformation-service/actions/workflows/action.yaml/badge.svg)
 ![Github](https://github.com/SaludTechAlpes/saludtechalpes-data-transformation-service/actions/workflows/merge-to-develop.yaml/badge.svg)
@@ -136,7 +136,7 @@ curl -X GET http://localhost:5000/health
 
 **Endpoint:** `GET /simular-datos-agrupados`
 
-**Descripción:** Envía un evento de procesamiento de datos ficticio a Pulsar, lo que comienza todo el proceso de anonimización y mapeo.
+**Descripción:** Envía un evento de procesamiento de datos ficticio a Pulsar, lo que comienza todo el proceso de transformación de datos.
 
 **Ejemplo de solicitud con curl:**
 
