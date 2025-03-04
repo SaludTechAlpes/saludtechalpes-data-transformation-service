@@ -152,8 +152,4 @@ curl -X GET http://localhost:5000//simular-datos-agrupados
 }
 ```
 
-## 📌 **Notas Finales**
-
-Este servicio es solo una parte del sistema **SaludTech Alpes** y debe comunicarse con otros servicios para funcionar correctamente. En un futuro se debe separar completamente el módulo de **ingesta** en un microservicio independiente.
-
 ---
