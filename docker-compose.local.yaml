@@ -104,7 +104,9 @@ services:
   data-transformation-service:
     container_name: data-transformation-service
     hostname: data-transformation-service
-    image: ghcr.io/saludtechalpes/saludtechalpes-data-transformation-service:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     networks:
       - db_net
       - pulsar

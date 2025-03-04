@@ -48,10 +48,3 @@ class Despachador:
         )
         comando_pulsar = ComandoEjecutarModelos(data=payload)
         self._publicar_mensaje(comando_pulsar, topico, ComandoEjecutarModelos)
-
-    def cerrar(self):
-        """
-        Cierra la conexión con Pulsar.
-        """
-        self.cliente.close()
-        logger.info("🔌 Cliente Pulsar cerrado.")

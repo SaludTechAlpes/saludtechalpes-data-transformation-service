@@ -24,17 +24,17 @@ spec:
             - name: "FLASK_ENV"
               valueFrom:
                 configMapKeyRef:
-                  name: data-processor-configmap
+                  name: data-transformation-configmap
                   key: FLASK_ENV
             - name: "APP_NAME"
               valueFrom:
                 configMapKeyRef:
-                  name: data-processor-configmap
+                  name: data-transformation-configmap
                   key: APP_NAME
             - name: "PHRASE_KEY"
               valueFrom:
                 secretKeyRef:
-                  name: data-processor-secrets
+                  name: data-transformation-secrets
                   key: PHRASE_KEY
           ports:
             - containerPort: 5000

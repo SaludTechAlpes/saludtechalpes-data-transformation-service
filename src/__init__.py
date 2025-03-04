@@ -24,9 +24,6 @@ logger = logging.getLogger(__name__)
 
 # Configuración de Pulsar
 config = Config()
-pulsar_cliente = None
-if os.getenv("FLASK_ENV") != "test":
-    pulsar_cliente = pulsar.Client(f'pulsar://{config.BROKER_HOST}:{config.BROKER_PORT}')
 
 def comenzar_consumidor():
     """
@@ -52,8 +49,6 @@ def comenzar_consumidor():
     threading.Thread(target=consumidor_comandos_ejecutar_modelos.suscribirse, daemon=True).start()
 
 def create_app(configuracion=None):
-    global pulsar_cliente
-
     app = Flask(__name__, instance_relative_config=True)
 
     with app.app_context():
@@ -91,14 +86,5 @@ def create_app(configuracion=None):
         except Exception as e:
             logger.error(f"❌ Error al publicar evento de prueba: {e}")
             return jsonify({"error": "Error al publicar evento en Pulsar"}), 500
-
-
-    # Cerrar Pulsar cuando la aplicación termina
-    @app.teardown_appcontext
-    def cerrar_pulsar(exception=None):
-        global pulsar_cliente
-        if pulsar_cliente:
-            pulsar_cliente.close()
-            logger.info("Cliente Pulsar cerrado al detener Flask.")
 
     return app
