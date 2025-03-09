@@ -1,0 +1,19 @@
+{
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 5432,
+      "askForPassword": true,
+      "driver": "PostgreSQL",
+      "name": "saludtech",
+      "database": "saludtechalpes",
+      "username": "admin"
+    }
+  ],
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#540B4B",
+    "titleBar.activeBackground": "#761068",
+    "titleBar.activeForeground": "#FEFBFE"
+  }
+}
