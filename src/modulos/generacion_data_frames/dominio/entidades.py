@@ -8,7 +8,7 @@ from src.seedwork.dominio.entidades import Entidad
 
 @dataclass
 class DataFrame(Entidad):
-    id: uuid.UUID = field(default_factory=uuid.uuid4)
+    id: uuid.UUID = None
     ruta_archivo_parquet: str = ""
     fecha_generacion: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
-    cluster_id: uuid.UUID = field(default_factory=uuid.uuid4)
+    cluster_id: uuid.UUID = None

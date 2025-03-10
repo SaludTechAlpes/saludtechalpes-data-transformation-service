@@ -1,7 +1,7 @@
 from src.modulos.generacion_data_frames.dominio.comandos import EjecutarModelosComando
 from src.seedwork.infraestructura.consumidor_pulsar import ConsumidorPulsar
 from src.modulos.generacion_data_frames.infraestructura.schema.v1.eventos import EventoDatosAgrupados
-from src.modulos.generacion_data_frames.infraestructura.schema.v1.comandos import ComandoEjecutarModelos
+from src.modulos.generacion_data_frames.infraestructura.schema.v1.comandos import ComandoEjecutarModelos, ComandoRevertirEjecucionModelos
 from src.modulos.generacion_data_frames.infraestructura.despachadores import Despachador
 from src.modulos.generacion_data_frames.dominio.puertos.procesar_comando_modelos import PuertoProcesarComandoModelos
 import pulsar
@@ -26,8 +26,12 @@ class ConsumidorComandoEjecutarModelos(ConsumidorPulsar):
 
     def procesar_mensaje(self, data):
         self.puerto_modelos.procesar_comando_ejecutar_modelos(
+            id_imagen_importada=data.id_imagen_importada, 
+            id_imagen_anonimizada=data.id_imagen_anonimizada, 
+            id_imagen_mapeada=data.id_imagen_mapeada, 
             cluster_id=data.cluster_id,
-            ruta_imagen_anonimizada=data.ruta_imagen_anonimizada
+            ruta_imagen_anonimizada=data.ruta_imagen_anonimizada,
+            evento_a_fallar=data.evento_a_fallar
         )
 
 
@@ -43,8 +47,23 @@ class ConsumidorEventoDatosAgrupados(ConsumidorPulsar):
 
     def procesar_mensaje(self, data):
         comando_ejecutar = EjecutarModelosComando(
+            id_imagen_importada=data.id_imagen_importada, 
+            id_imagen_anonimizada=data.id_imagen_anonimizada, 
+            id_imagen_mapeada=data.id_imagen_mapeada, 
             cluster_id=data.cluster_id,
-            ruta_imagen_anonimizada=data.ruta_imagen_anonimizada
+            ruta_imagen_anonimizada=data.ruta_imagen_anonimizada,
+            evento_a_fallar=data.evento_a_fallar
         )
-        logger.info(f'data: {data}')
         self.despachador.publicar_comando(comando_ejecutar, "ejecutar-modelos")
+
+class ConsumidorComandoRevertirEjecucionModelos(ConsumidorPulsar):
+    def __init__(self, puerto_modelos: PuertoProcesarComandoModelos):
+        cliente = pulsar.Client(f'pulsar://{config.BROKER_HOST}:6650')
+
+        super().__init__(cliente, "revertir-ejecucion-modelos", "saludtech-sub-comandos", ComandoRevertirEjecucionModelos)
+        self.puerto_modelos = puerto_modelos
+
+    def procesar_mensaje(self, data):
+        self.puerto_modelos.procesar_comando_revertir_ejecucion(
+            id_dataframe=data.id_dataframe,
+        )
