@@ -1,6 +1,6 @@
-# SaludTech Alpes - Data Processor Service
+# SaludTech Alpes - Data Transformation Service
 
-Este repositorio contiene el servicio de trasnformación de datos para el proyecto **SaludTech Alpes**. Este servicio implementa una arquitectura basada en **eventos y comandos**, utilizando **CQRS** y separación de responsabilidades para garantizar modularidad y escalabilidad.
+Este repositorio contiene el servicio de transformación de datos para el proyecto **SaludTech Alpes**. Este servicio implementa una arquitectura basada en **eventos y comandos**, utilizando **CQRS** y separación de responsabilidades para garantizar modularidad y escalabilidad.
 
 ![Github](https://github.com/SaludTechAlpes/saludtechalpes-data-transformation-service/actions/workflows/action.yaml/badge.svg)
 ![Github](https://github.com/SaludTechAlpes/saludtechalpes-data-transformation-service/actions/workflows/merge-to-develop.yaml/badge.svg)
@@ -61,11 +61,7 @@ Este módulo contiene código reutilizable para todas las aplicaciones dentro de
 
 El sistema sigue un flujo basado en **eventos y comandos**:
 
-1. **Ingesta de datos**: El módulo de ingesta emite el evento **`DatosIngestadosEvento`**.
-2. **Anonimización de datos**: El módulo de anonimización consume este evento y envía el comando **`AnonimizarDatosComando`**.
-3. **Procesamiento de anonimización**: Se ejecuta el proceso de anonimización y, si es exitoso, se emite el evento **`DatosAnonimizadosEvento`**.
-4. **Mapeo de datos**: El módulo de mapeo escucha **`DatosAnonimizadosEvento`** y ejecuta el comando **`MapearDatosComando`**, que agrupa las imágenes en clústeres según sus metadatos.
-5. **Procesamiento de mapeo**: Se ejecuta el proceso de mapeo y, si es exitoso, se emite el evento **`DatosAgrupados`**
+**Transformacion de datos**: El módulo de procesamiento emite el evento **`Datos agrupados`** y el microservicio emite el evento **`Dataframes generados`**
 
 ## 🚀 **Cómo Ejecutar la Aplicación**
 
@@ -136,7 +132,7 @@ curl -X GET http://localhost:5000/health
 
 **Endpoint:** `GET /simular-datos-agrupados`
 
-**Descripción:** Envía un evento de procesamiento de datos ficticio a Pulsar, lo que comienza todo el proceso de anonimización y mapeo.
+**Descripción:** Envía un evento de procesamiento de datos ficticio a Pulsar, lo que comienza todo el proceso de transformación de datos.
 
 **Ejemplo de solicitud con curl:**
 
@@ -151,9 +147,5 @@ curl -X GET http://localhost:5000//simular-datos-agrupados
   "message": "Evento enviado a Pulsar"
 }
 ```
-
-## 📌 **Notas Finales**
-
-Este servicio es solo una parte del sistema **SaludTech Alpes** y debe comunicarse con otros servicios para funcionar correctamente. En un futuro se debe separar completamente el módulo de **ingesta** en un microservicio independiente.
 
 ---
